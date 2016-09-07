@@ -2,7 +2,7 @@
 
 namespace Algolia\AlgoliaSearch\Helper\Entity;
 
-use Algolia\AlgoliaSearch\Helper\Image;
+
 use Magento\Catalog\Model\Product;
 use Magento\Directory\Model\Currency;
 use Magento\Framework\DataObject;
@@ -630,18 +630,16 @@ class ProductHelper extends BaseHelper
         $customData['categories_without_path'] = $categories;
 
         /** @var Image $imageHelper */
-        $imageHelper = $this->objectManager->create('Algolia\AlgoliaSearch\Helper\Image');
+        $imageHelper = $this->objectManager->create('Magento\Catalog\Helper\Image');
 
         if (false === isset($defaultData['thumbnail_url'])) {
-            $thumb = $imageHelper->init($product, 'thumbnail')->resize(75, 75);
 
-            $customData['thumbnail_url'] = $thumb->getUrl();
+            $customData['thumbnail_url'] = $imageHelper->init($product, 'product_thumbnail_image')->getUrl();
         }
 
         if (false === isset($defaultData['image_url'])) {
-            $image = $imageHelper->init($product, $this->config->getImageType())->resize($this->config->getImageWidth(), $this->config->getImageHeight());
 
-            $customData['image_url'] = $image->getUrl();
+            $customData['image_url'] = $imageHelper->init($product, 'product_thumbnail_image')->getUrl();
 
             if ($this->isAttributeEnabled($additionalAttributes, 'media_gallery')) {
                 $product->load('media_gallery');
